@@ -23,8 +23,6 @@
 void srandom(unsigned seed);
 double xSquared(int samples);
 
-#define DARTS 50000     /* number of throws at dartboard */
-#define ROUNDS 10      /* number of times "darts" is iterated */
 #define MASTER 0        /* task ID of master task */
 
 int main(int argc, char* argv[])
@@ -53,11 +51,11 @@ int main(int argc, char* argv[])
         rc,             /* return code */
         i;
 
-
+    printf("1\n");
     MPI_Status status;
-
+    printf("2\n");
     MPI_Init(&argc, &argv);
-
+    printf("3\n");
     /* Obtain number of tasks and task ID */
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
