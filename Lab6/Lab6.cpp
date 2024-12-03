@@ -7,7 +7,7 @@
 #include <random>
 #include <iostream>
 
-double xSquared(int samples);
+double xSquared(int samples, int taskid);
 
 #define MASTER 0        /* task ID of master task */
 
