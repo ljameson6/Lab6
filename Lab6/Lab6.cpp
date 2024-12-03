@@ -1,18 +1,3 @@
-/**********************************************************************
- * FILE: mpi_pi_reduce.c
- * OTHER FILES: dboard.c
- * DESCRIPTION:
- *   MPI pi Calculation Example - C Version
- *   Collective Communication example:
- *   This program calculates pi using a "dartboard" algorithm.  See
- *   Fox et al.(1988) Solving Problems on Concurrent Processors, vol.1
- *   page 207.  All processes contribute to the calculation, with the
- *   master averaging the values for pi. This version uses mpc_reduce to
- *   collect results
- * AUTHOR: Blaise Barney. Adapted from Ros Leibensperger, Cornell Theory
- *   Center. Converted to MPI: George L. Gusciora, MHPCC (1/95)
- * LAST REVISED: 06/13/13 Blaise Barney
-**********************************************************************/
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,9 +13,9 @@ double xSquared(int samples);
 int main(int argc, char* argv[])
 {
     printf("1\n");
-    MPI_Status status;
+    //MPI_Status status;
     printf("2\n");
-    MPI_Init(&argc, &argv);
+    MPI_Init(NULL, NULL);
     printf("3\n");
 
     //Parse input args
