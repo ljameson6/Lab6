@@ -1,5 +1,12 @@
+/*
+Author: Lydia Jameson
+Class: ECE6122 (A)
+Last Date Modified: date
+Description:
+Estimate the value of two integrals
+*/
+
 #include "mpi.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <map>
 #include <string>
@@ -31,23 +38,14 @@ int main(int argc, char* argv[])
     int P = abs(std::stoi(mp["-P"]));
     int N = abs(std::stoi(mp["-N"]));
 
-    double	homesum,         /* value of pi calculated by current task */
-        totsum,	        /* sum of tasks' pi values */
-        pi,	            /* average of pi after "darts" is thrown */
-        avesum;	        /* average pi value for all iterations */
-
-    int	taskid,	        /* task ID - also used as seed number */
-        numtasks,       /* number of tasks */
-        rc,             /* return code */
-        i;
+    double	homesum, totsum;
+    int	taskid, numtasks;
 
     /* Obtain number of tasks and task ID */
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
 
     int samplesPerTask = N / numtasks;
-
-    std::cout << "MPI task " << taskid << " has started..." << std::endl;
 
     if (taskid == MASTER) {
         if (P == 2) {
@@ -65,7 +63,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    rc = MPI_Reduce(&homesum, &totsum, 1, MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
+    MPI_Reduce(&homesum, &totsum, 1, MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
 
     if (taskid == MASTER) {
         std::cout << "The estimate for integral " << P << " is " << totsum / N << std::endl;
@@ -85,9 +83,8 @@ double xSquared(int samples, int taskid)
     double sum, x;
 
     sum = 0;
-    /* "throw darts at board" */
+    
     for (int n = 0; n < samples; n++) {
-        /* generate random numbers for x and y coordinates */
         x = dis(gen);
         sum += x * x;
     }
@@ -103,9 +100,8 @@ double e(int samples, int taskid)
     double sum, x;
 
     sum = 0;
-    /* "throw darts at board" */
+    
     for (int n = 0; n < samples; n++) {
-        /* generate random numbers for x and y coordinates */
         x = dis(gen);
         sum += exp(-1 * x * x);
     }
