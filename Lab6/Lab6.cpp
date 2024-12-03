@@ -27,6 +27,15 @@ double xSquared(int samples);
 
 int main(int argc, char* argv[])
 {
+    printf("1\n");
+    MPI_Status status;
+    printf("2\n");
+    MPI_Init(&argc, &argv);
+    printf("3\n");
+    /* Obtain number of tasks and task ID */
+    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+    MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
+
     //Parse input args
     std::map<std::string, std::string> mp;
     mp["-P"] = "1";
@@ -50,15 +59,6 @@ int main(int argc, char* argv[])
         numtasks,       /* number of tasks */
         rc,             /* return code */
         i;
-
-    printf("1\n");
-    MPI_Status status;
-    printf("2\n");
-    MPI_Init(&argc, &argv);
-    printf("3\n");
-    /* Obtain number of tasks and task ID */
-    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-    MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
 
     int samplesPerTask = N / numtasks;
 
