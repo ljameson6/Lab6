@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <map>
 #include <string>
+#include <math.h>
 
 void srandom(unsigned seed);
 double xSquared(int samples);
