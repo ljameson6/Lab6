@@ -13,11 +13,9 @@ double xSquared(int samples, int taskid);
 
 int main(int argc, char* argv[])
 {
-    std::cout << "1" << std::endl;
     MPI_Status status;
-    std::cout << "2" << std::endl;
     MPI_Init(&argc, &argv);
-    std::cout << "3" << std::endl;
+    std::cout << "1" << std::endl;
 
     //Parse input args
     std::map<std::string, std::string> mp;
