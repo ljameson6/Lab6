@@ -4,19 +4,20 @@
 #include <map>
 #include <string>
 #include <math.h>
+#include <random>
+#include <iostream>
 
-void srandom(unsigned seed);
 double xSquared(int samples);
 
 #define MASTER 0        /* task ID of master task */
 
 int main(int argc, char* argv[])
 {
-    printf("1\n");
-    //MPI_Status status;
-    printf("2\n");
-    MPI_Init(NULL, NULL);
-    printf("3\n");
+    std::cout << "1" << std::endl;
+    MPI_Status status;
+    std::cout << "2" << std::endl;
+    MPI_Init(&argc, &argv);
+    std::cout << "3" << std::endl;
 
     //Parse input args
     std::map<std::string, std::string> mp;
@@ -48,34 +49,32 @@ int main(int argc, char* argv[])
 
     int samplesPerTask = N / numtasks;
 
-    printf("MPI task %d has started...\n", taskid);
-
-    /* Set seed for random number generator equal to task ID */
-    srandom(taskid);
-
-
-    avesum = 0;
+    std::cout << "MPI task " << taskid << " has started..." << std::endl;
 
     if (taskid == MASTER) {
-        homesum = xSquared(samplesPerTask + (N - samplesPerTask * numtasks));
+        homesum = xSquared(samplesPerTask + (N - samplesPerTask * numtasks), taskid);
     }
     else {
-        homesum = xSquared(samplesPerTask);
+        homesum = xSquared(samplesPerTask, taskid);
     }
 
     rc = MPI_Reduce(&homesum, &totsum, 1, MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
 
     if (taskid == MASTER) {
-        printf("The estimate for integral %d is %g\nBye!\n", P, totsum / N);
+        std::cout << "The estimate for integral " << P << " is " << totsum / N << std::endl;
+        std::cout << "Bye!" << std::endl;
     }
 
     MPI_Finalize();
     return 0;
 }
 
-double xSquared(int samples)
+double xSquared(int samples, int taskid)
 {
-    long random(void);
+    std::default_random_engine gen;
+    gen.seed(taskid);
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+
     double sum, x;
     int score, n;
     double intpart;
@@ -84,7 +83,7 @@ double xSquared(int samples)
     /* "throw darts at board" */
     for (n = 0; n < samples; n++) {
         /* generate random numbers for x and y coordinates */
-        x = (double)random();
+        x = dis(gen);
         x = modf(x, &intpart);
         sum += x * x;
     }
